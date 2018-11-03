@@ -1,0 +1,123 @@
+extern 的用法
+
+extern的用法的对象主要是变量和函数。
+
+用extern声明外部变量
+①什么是外部变量
+外部变量是指在文件或者函数外部定义的全局变量。外部变量仅定义一次并且在所有的函数之外。
+
+②在一个文件内使用外部变量
+作用域：如果在定义变量之前就使用了 外部变量就要用extern进行声明，在声明外部变量时，类型名是可以省略不写的。看一个从网上找的例子：
+
+    #include <stdio.h>
+    int max(int x,int y);     
+    int main(int argc,char *argv[ ] )
+    {
+            int result;
+    　　    extern int X; 	//外部变量声明
+    　      extern int Y;
+            result = max(X,Y);
+            printf("the max value is %d\n",result);
+            return 0;
+    }
+    int X = 10;            //定义外部变量
+    int Y = 20;
+    int max(int x, int y)
+    {
+            return (x>y ? x : y);
+    }
+
+③在多个文件中使用外部变量
+多文件使用外部变量通常使用在一个工程中有多个源文件的时候。在一个工程中往往会出现这种情况，就是在一个源文件A中定义的全局变量要被用到另一个源文件B中，这时就不能在源文件B中再次定义和源文件A中相同的变量。如果这样编译器则会出现重定义的错误，因此要在源文件B中用到已经定义的变量就必须用extern声明此变量。因为一个全局变量只可能被定义一次，但可以被声明多次。用一个网上找的例子来说明：
+
+    #include <stdio.h>
+    int BASE=2;				//变量定义
+    int exe(int x);  			//外部函数提前声明
+    int main(int argc, char *agrv[])
+    {
+            int a=10;
+            printf("%d^%d = %d\n",BASE,a,exe(a));
+            return 0;
+    }
+    	文件b.c的内容：
+    #include <stdio.h>
+    extern int BASE;				//外部变量声明
+    int exe(int x)
+    {
+            int i;
+            int ret=1;
+            for(i=0;i<x;i++)
+            {
+                    ret*=BASE;
+            }
+            return ret;
+    }
+
+这种情况只是在一个文件中被声明，其实还可以同时在另一个文件中声明。
+用extern声明外部函数
+①定义函数时，在函数返回类型的前面加上extern，表示此函数是外部函数，可以 供其他文件调用使用。例如：
+
+extern int func (int x,int y)，此时extren可以省略隐形为外部函数。当其他文件调用此文件函数是使用extern进行声明且extern可以省略。这时被调用的函数的作用域被扩展。例子：
+
+    #include <stdio.h>
+    #include "b.h"
+    int main()
+    {
+            int x=10,y=5;
+            printf("x = 10,y = 5\n");
+            printf("x + y = %d\n",add(x,y));
+            printf("x - y = %d\n",sub(x,y));
+            printf("x * y = %d\n",mult(x,y));
+            printf("x / y = %d\n",div(x,y));
+            return 0;
+    }
+    文件b.h的内容：
+    #ifndef __F_H
+    #define __F_H
+    extern int add(int x,int y);
+    extern int sub(int x,int y);
+    extern int mult(int x,int y);
+    extern int div(int x,int y);
+    　#endif
+    文件b.c的内容：
+    #include <stdio.h>
+    int add(int x,int y)
+    {
+            return(x+y);
+    }
+    int sub(int x,int y)
+    {
+            return(x-y);
+    }
+    int mult(int x,int y)
+    {
+            return(x*y);
+    }
+    int div(int x,int y)
+    {
+            if(y!=0)
+            {
+                    return(x/y);
+            }
+            printf("mult() fail!the second para can not be zero!\n ");
+            return(-1);
+    }
+
+
+从程序中能得到，在b.h文件中声明好了b.c的函数，如果要使用此文件中的函数，只需将b.c包含到被需要的文件中即可，这样就可以使用b.c的接口函数了。在工程中经常采用这种方法，在.C文件中写函数的实现，在.h文件中声明函数接口，当需要使用.C文件中的函数时，只需要将.h文件包含进来就可以了。
+
+
+volatile的用法
+
+①volatile是一个修饰符，用来修饰不同线程修改和访问的变量。如果没有它，则根本无法编写多线程的程序或者编译器失去大量优化的机会。例子：
+
+    volatile int i=10; 
+    int j = i; 
+    ... 
+    int k = i; 
+
+
+volatile告诉编译器i随时可能发生变化，当使用它的时候要小心，必须从它的地址中读取数据。因此k中的值是从i的地址中读取出来的。
+
+一个被定义为volatile的变量是说这个变量很可能会被意想不到的改变。就是说，当优化器在用到这个变量时，必须从该变量的地址中读取这个变量的数据，而不是使用保存在寄存器中的备份。
+

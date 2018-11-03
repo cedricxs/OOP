@@ -138,18 +138,5 @@ vector<string> com;
     myop(com,sum);
     com.clear();
     }
-
-
-
-
-
-
-
-
-
-while(1)
-{
- int x;cin>>x;   
-}
-
+return 0;
 }

@@ -49,10 +49,10 @@ bool operator()(T m,T n){
 int main()
 {
 int t;
-cin>>t;
+cin>>t;list<int>a;
 while(t--)
 {
-    list<int>a;int temp;
+    int temp;
     for(int i=0;i<10;i++)
     {
         cin>>temp;
@@ -60,12 +60,14 @@ while(t--)
     }
     list<int>::iterator it;
     a.sort(judge<int>());
-cout<<a.front()<<" "<<a.back();
+cout<<a.front()<<" "<<a.back()<<endl;
+a.pop_front();a.pop_back();
+//for(list<int>::iterator ii=a.begin();ii!=a.end();ii++)cout<<*ii<<" ";
 }
-int y;
-cin>>y;
+cout<<a.size();
 return 0;
 }
+
 /*template<class T>
 class mycompare
 {public:
