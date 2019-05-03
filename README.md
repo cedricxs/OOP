@@ -1,4 +1,4 @@
-# STL算法列举，可惜之处在于未给出参数，用时再查吧
+# STL算法列举，可惜之处在于未给出参数，用时再查
 
     STL算法部分主要由头文件<algorithm>,<numeric>,<functional>组成。要使用 STL中的算法函数必须包含头文件<algorithm>，对于数值算法须包含<numeric>，<functional> 中则定义了一些模板类，用来声明函数对象。
 
